@@ -1,0 +1,35 @@
+{
+  "name": "Instaspect",
+  "version": "0.1",
+  "description": "TODO",
+  "permissions": [ "*://www.instagram.com/*", "activeTab"],
+  "options_page": "src/html/options.html",
+  "background": {
+    "scripts": ["src/js/background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.instagram.com/*"
+      ],
+      "js": ["src/js/content.js"]
+    }
+  ],
+  "page_action": {
+    "default_popup": "src/html/popup.html",
+    "default_icon": {
+      "16": "assets/instaspect16.png",
+      "32": "assets/instaspect32.png",
+      "48": "assets/instaspect48.png",
+      "128": "assets/instaspect128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/instaspect16.png",
+    "32": "assets/instaspect32.png",
+    "48": "assets/instaspect48.png",
+    "128": "assets/instaspect128.png"
+  },
+  "manifest_version": 2
+}

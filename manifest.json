@@ -2,7 +2,7 @@
   "name": "Instaspect",
   "version": "0.1",
   "description": "TODO",
-  "permissions": [ "*://www.instagram.com/*", "activeTab"],
+  "permissions": [ "*://www.instagram.com/*", "activeTab", "storage"],
   "options_page": "src/html/options.html",
   "background": {
     "scripts": ["src/js/background.js"],

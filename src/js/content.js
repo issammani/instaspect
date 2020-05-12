@@ -31,7 +31,7 @@ window.addEventListener('load', () => {
 
     const observer = new MutationObserver(observerHandler);
      
-    // Listen to all changes to body and child nodes
+    // Listen for all changes to body and child nodes
     observer.observe(document.body, {attributes: true, childList: true, characterData: true});
 
 });

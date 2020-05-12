@@ -1,7 +1,11 @@
+
+let instagramTabId = null;
+
 const requestHandler = (request, sender, sendRequest) => {
     if(request.body === 'showPageAction'){
+        instagramTabId = sender.tab.id;
         chrome.pageAction.show(sender.tab.id);
-    }else if(request.body === "profilePage"){
+    }else if(request.body === 'profilePage'){
         profilePageHandler(request.profile);
     }
         
@@ -22,16 +26,15 @@ const requestHandler = (request, sender, sendRequest) => {
  * Digit group separator: 1 100 = 1100
  */
 const parseCount = (rawCountString) => {
-    const stripNumberRegex = /(\d+[,\.\ ]?\d+)([kmb])?/i;
+    const stripNumberRegex = /(\d+[,\.\ ]?(:?\d*)?)([kmb])?/i;
     // Look for a matching count number
     let countString = rawCountString.match(stripNumberRegex);
-    if(countString.length === 3){
+    if(countString.length === 4){
         // count has a letter suffix (k, m or b) [Probably an overkill allowing billions]
         let multiplier = {'k': 10**3, 'm': 10**6, 'b': 10**9};
-
         return (
-            countString[2]
-                ? Number(countString[1].replace(',','.')) * multiplier[countString[2]] 
+            countString[3]
+                ? Number(countString[1].replace(',','.')) * multiplier[countString[3]] 
                 : Number(countString[1].replace(/[\s\.,]/,''))
         );
     }else{
@@ -41,13 +44,15 @@ const parseCount = (rawCountString) => {
 }
 
 const profilePageHandler = (profile) => {
-    
-    chrome.storage.local.set({
+
+    const profileData = {
         instaPosts: parseCount(profile.posts), 
         instaFollowers: parseCount(profile.followers),
         instaFollowing: parseCount(profile.following),
         instaName: profile.name
-    });
+    };
+    
+    chrome.storage.local.set(profileData);
 };
 
 // Listen for messages

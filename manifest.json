@@ -5,7 +5,7 @@
   "permissions": [ "*://www.instagram.com/*", "tabs", "activeTab", "storage"],
   "options_page": "src/html/options.html",
   "background": {
-    "scripts": ["src/js/background.js"],
+    "page": "src/html/background.html",
     "persistent": false
   },
   "content_scripts": [

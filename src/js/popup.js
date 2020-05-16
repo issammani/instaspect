@@ -1,4 +1,4 @@
-import requestLogger from './utils/requestLogger.js';
+import {sendMessageBackend} from './utils/requestSender.js';
 
 chrome.storage.local.get(['instaName', 'instaPosts', 'instaFollowers', 'instaFollowing'], (response) => {
     if(Object.keys(response).length !== 0){
@@ -16,6 +16,6 @@ chrome.storage.local.get(['instaName', 'instaPosts', 'instaFollowers', 'instaFol
 
 [...document.querySelectorAll('button')].forEach(button => {
     button.addEventListener('click', (ev) => {
-        chrome.runtime.sendMessage({body: `get_${ev.target.id}`});
+        sendMessageBackend({body: `get_${ev.target.id}`});
     });
 });

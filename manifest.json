@@ -13,7 +13,8 @@
       "matches": [
         "*://www.instagram.com/*"
       ],
-      "js": ["src/js/content.js"]
+      "js": ["src/js/import.js"],
+      "run_at": "document_start"
     }
   ],
   "page_action": {
@@ -30,6 +31,17 @@
     "32": "assets/instaspect32.png",
     "48": "assets/instaspect48.png",
     "128": "assets/instaspect128.png"
+  },
+  "web_accessible_resources": [
+    "src/js/content.js", 
+    "src/js/utils/selectors.js", 
+    "src/js/utils/instagram.js",
+    "src/js/utils/requestSender.js",
+    "src/js/utils/TextFile.js",
+    "src/js/utils/interceptRequest.js"
+  ],
+  "externally_connectable":{
+    "matches": ["*://www.instagram.com/*"]
   },
   "manifest_version": 2
 }

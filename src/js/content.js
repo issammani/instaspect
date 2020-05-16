@@ -1,37 +1,31 @@
-const PROFILE_DATA_SELECTOR = 'header section ul li';
-const PROFILE_NAME_SELECTORS = ['header section h1', 'header section h2'];
+import selectors from './utils/selectors.js';
+import {isProfile, fetchProfileData} from './utils/instagram.js';
+import {sendMessageFrontend} from './utils/requestSender.js';
 
-window.addEventListener('load', () => {
-    
-    // Check if current page is a profile
-    const isProfile = () => {
-        const profileData = document.querySelectorAll(PROFILE_DATA_SELECTOR);
-        const profileName = PROFILE_NAME_SELECTORS.map(selector => document.querySelector(selector)).filter(v => v);
 
-        // Check wether the current page is a profile page
-        if(profileName.length >= 1 && profileData.length === 3){
-            chrome.runtime.sendMessage({body: 'profilePage', profile: {
-                name: profileName[0].textContent,
-                posts: profileData[0].textContent,
-                followers: profileData[1].textContent,
-                following: profileData[2].textContent
-            }});
-        }else{
-            // Delete previously cached data
-            chrome.storage.local.remove(['instaName', 'instaPosts', 'instaFollowers', 'instaFollowing']);
-        }
-    };
-
+export function main(){
     // Page is ready : showPageAction and check if current page is a profile
-    chrome.runtime.sendMessage({body: 'showPageAction'});
+    sendMessageFrontend({body: 'showPageAction'});
     isProfile();
 
     // Add MutationObserver to track, when page changes (Instagram is an SPA)
-    const observerHandler = mutations => isProfile(); 
+    const observerHandler = mutations => {
+        // Detect if current page has a profile
+        isProfile(); 
+    };
 
     const observer = new MutationObserver(observerHandler);
      
     // Listen for all changes to body and child nodes
     observer.observe(document.body, {attributes: true, childList: true, characterData: true});
 
-});
+    chrome.runtime.onMessage.addListener((request, sender) => {
+        if(request.body === 'get_followers' || request.body === 'get_following'){
+            let index = request.body === 'get_followers' ? 1 : 2;
+            fetchProfileData(index);
+        }else{
+            // THIS DOESN'T CONCERN YOU
+        }
+
+    });
+}

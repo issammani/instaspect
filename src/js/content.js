@@ -2,6 +2,19 @@ import selectors from './utils/selectors.js';
 import {isProfile, fetchProfileData} from './utils/instagram.js';
 import {sendMessageFrontend} from './utils/requestSender.js';
 
+/*** Source: 
+ * https://stackoverflow.com/questions/9515704/insert-code-into-the-page-context-using-a-content-script/9517879#9517879 
+ **/
+// Load xhr interceptor
+const script = document.createElement('script');
+console.log('Wait....');
+script.src = chrome.runtime.getURL('src/js/utils/interceptRequest.js');
+script.onload = function() {
+    this.remove();
+};
+
+(document.head || document.documentElement).appendChild(script);
+
 
 export function main(){
     // Page is ready : showPageAction and check if current page is a profile

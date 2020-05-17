@@ -15,11 +15,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendRequest) => {
 
 // Listen for external messages
 chrome.runtime.onMessageExternal.addListener((request, sender, sendResponse) => {
-    // requestLogger(request, sender);
-    console.log('Received bla bla');
-    console.log(JSON.parse(request.data));
-    // json.data.user.edge_follow.count number of all followers or followers 
-    // json.data.user.edge_follow.edges.length # of fetched profiles
-    // json.data.user.edge_follow.edges.map(edge => edge.node.username) all fetched users
+    requestLogger(request, sender);
+    const profiles = JSON.parse(request.data);
+
+    // json.data.user.edge_follow(ed_by).count number of all followers or followers 
+    // json.data.user.edge_follow(ed_by).edges.length # of fetched profiles
+    // json.data.user.edge_follow(ed_by).edges.map(edge => edge.node.username) all fetched users
     // Notes : initial fetch 24 profiles, next 12 profiles
+    const key = Object.keys(profiles.data.user).filter(key => /edge_follow(?:ed_by)?/.test(key));
+    sendMessageBackend({
+        body: 'parsed_json', 
+        data: profiles.data.user[key].edges
+                .map(edge => edge.node.username)
+                .reduce( (accumulator, currentValue) => accumulator += currentValue !== '' ? currentValue + '\r\n' : '', '')
+    });
+
 });

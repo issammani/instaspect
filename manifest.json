@@ -38,7 +38,9 @@
     "src/js/utils/instagram.js",
     "src/js/utils/requestSender.js",
     "src/js/utils/TextFile.js",
-    "src/js/utils/interceptRequest.js"
+    "src/js/utils/interceptRequest.js",
+    "src/js/utils/inject.js",
+    "src/js/utils/scroll.js"
   ],
   "externally_connectable":{
     "matches": ["*://www.instagram.com/*"]

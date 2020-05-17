@@ -14,6 +14,5 @@ const intercept = (url_match, callback) => {
 }
 
 intercept(URL_MATCH, (response) => {
-    console.log('Saving to file...', response.length);
     chrome.runtime.sendMessage('nfnghmhejhmjhhngjliebjjnclbaojlg',{body: 'parse_json', data: response});
 });

@@ -1,22 +1,22 @@
 import selectors from './utils/selectors.js';
+import inject from './utils/inject.js';
 import {isProfile, fetchProfileData} from './utils/instagram.js';
 import {sendMessageFrontend} from './utils/requestSender.js';
+import {TextFile} from './utils/TextFile.js';
 
-/*** Source: 
- * https://stackoverflow.com/questions/9515704/insert-code-into-the-page-context-using-a-content-script/9517879#9517879 
- **/
-// Load xhr interceptor
-const script = document.createElement('script');
-console.log('Wait....');
-script.src = chrome.runtime.getURL('src/js/utils/interceptRequest.js');
-script.onload = function() {
-    this.remove();
-};
+// Inject xhr interceptor
+inject('src/js/utils/interceptRequest.js');
 
-(document.head || document.documentElement).appendChild(script);
+// Inject scroll function
+inject('src/js/utils/scroll.js');
+
+
 
 
 export function main(){
+    // Initialize a new file
+    const profilesFile = new TextFile('instaspect.txt');
+
     // Page is ready : showPageAction and check if current page is a profile
     sendMessageFrontend({body: 'showPageAction'});
     isProfile();
@@ -36,6 +36,15 @@ export function main(){
         if(request.body === 'get_followers' || request.body === 'get_following'){
             let index = request.body === 'get_followers' ? 1 : 2;
             fetchProfileData(index);
+        }else if(request.body === 'parsed_json'){
+            // Append data to file
+            profilesFile.append(request.data.toString());
+            console.log('Posting message...');
+            window.postMessage('scroll'); // Unclear docs about the separation between the running env of a content script and the actual webpage.
+            
+            // // Download file
+            // profilesFile.download();
+
         }else{
             // THIS DOESN'T CONCERN YOU
         }

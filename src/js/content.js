@@ -39,12 +39,13 @@ export function main(){
         }else if(request.body === 'parsed_json'){
             // Append data to file
             profilesFile.append(request.data.toString());
-            console.log('Posting message...');
-            window.postMessage('scroll'); // Unclear docs about the separation between the running env of a content script and the actual webpage.
-            
-            // // Download file
-            // profilesFile.download();
-
+            if(!request.done){
+                window.postMessage('scroll'); // Unclear docs about the separation between the running env of a content script and the actual webpage.
+            }else{
+                profilesFile.download(); // Download file
+            } 
+        }else if(request.body === 'download_file'){
+            profilesFile.download();
         }else{
             // THIS DOESN'T CONCERN YOU
         }

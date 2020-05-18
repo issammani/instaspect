@@ -9,8 +9,6 @@ window.addEventListener('message', function(event) {
         if(document.querySelector(selectors.CURRENTLY_SHOWN_MODAL).parentNode){
             document.querySelector(selectors.CURRENTLY_SHOWN_MODAL).parentNode.scrollBy(0, 2000);
             clearInterval(intervalId);
-        }else{
-            console.log('Nope');
         }
     }, 100);
     
